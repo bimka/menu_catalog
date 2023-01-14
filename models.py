@@ -1,39 +1,31 @@
-class Menu():
+from sqlalchemy import Column, ForeignKey, Integer, Float, String
+from sqlalchemy.orm import relationship
 
-    counter = 0
+from .database import Base
 
-    def __init__(self, name):
-        self.name = name
-        Menu.counter += 1
+class Menu(Base):
+    __tablename__ = "menus"
 
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, index=True)
+
+    submenus = relationship("Submenu", back_populates="menus")
 
 
 class Submenu(Menu):
+    __tablename__ = "submenus"
 
-    counter = 0
+    id = Column(Integer, primary_key=True, integer=True)
+    name = Column(String, unique=True, index=True)
+    menu_id = Column(Integer, ForeignKey("menu.id"))
 
-    def __init__(self, name):
-        self.name = name
-        Submenu.counter += 1
-
+    foods = relationship("Food", back_populates="submenus")
 
 
 class Food(Submenu):
+    __tablename__ = "foods"
 
-    counter = 0
-
-    def __init__(self, name, price):
-        self.name = name
-        self.price = price
-        Food.counter += 1
-
-    def get_price(self):
-        rounded_price = round(self.price, 2)
-        return rounded_price
-
-a = Submenu('one')
-b = Menu('two')
-c = Submenu('three')
-d = Food('four', 30.126)
-
-print(d.get_price())
+    id = Column(Integer, primary_key=True, integer=True)
+    name = Column(Integer, unique=True, index=True)
+    price = Column(Float, index=True)
+    submenu_id = Column(Integer, ForeignKey("submenu.id"))
