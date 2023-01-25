@@ -1,7 +1,9 @@
+import uuid
+
 from pydantic import BaseModel
 
 
-class FoodBase(BaseModel):
+"""class FoodBase(BaseModel):
     name: str
     price: float
 
@@ -29,23 +31,28 @@ class Submenu(SubmenuBase):
     menu_id: int
 
     class Config:
-        orm_mode = True
+        orm_mode = True"""
 
 
 class MenuBase(BaseModel):
-    name: str
+    title: str
+    description: str | None = None
 
 
 class MenuCreate(MenuBase):
-    pass 
-
+    pass
 
 class Menu(MenuBase):
-    id: int
-    submenus: list[Submenu] = []
+    id: uuid.UUID
+    #submenus: list[Submenu] = []
 
     class Config:
         orm_mode = True
+
+
+class MenuUpdate(BaseModel):
+    title: str | None
+    description: str | None
 
 
 
