@@ -16,43 +16,44 @@ class Food(FoodBase):
     id: int
     submenu_id: int
 
+"""
+################################
+#
+#             Submenu
+#
+#################################
+
 
 class SubmenuBase(BaseModel):
-    name: str
+    title: str
+    description: str | None = None
+
+
+class Submenu(SubmenuBase):
+    id: uuid.UUID
+    dishes_count: int
+    #foods: list[Food] = []
+    menu_id: int
+
+    class Config:
+        orm_mode = True
 
 
 class SubmenuCreate(SubmenuBase):
     pass 
 
 
-class Submenu(SubmenuBase):
-    id: int
-    foods: list[Food] = []
-    menu_id: int
-
-    class Config:
-        orm_mode = True"""
-
-
-class MenuBase(BaseModel):
-    title: str
-    description: str | None = None
-
-
-class MenuCreate(MenuBase):
-    pass
-
-class Menu(MenuBase):
-    id: uuid.UUID
-    #submenus: list[Submenu] = []
-
-    class Config:
-        orm_mode = True
-
-
-class MenuUpdate(BaseModel):
+class SubmenuUpdate(BaseModel):
     title: str | None
     description: str | None
+
+
+################################
+#
+#             Menu
+#
+#################################
+
 
 
 
