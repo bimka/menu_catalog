@@ -1,25 +1,14 @@
 import uuid
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 
 from src.session import Base
 
-"""
-menus = Table(
-    "menus", 
-    metadata, 
-    Column("id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4), 
-    Column("title", String, unique=True), 
-    Column("description", String, index=True),
-    Column("submenus_count", Integer, default=0),
-    Column("dishes_count", Integer, default=0)
-)
 
-"""
 class Menu(Base):
     __tablename__ = "menus"
-    #metadata = MetaData()
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     title = Column(String, unique=True)
@@ -27,19 +16,22 @@ class Menu(Base):
     submenus_count = Column(Integer, default=0)
     dishes_count = Column(Integer, default=0)
 
-    # submenus = relationship("Submenu", back_populates="menus")
+    submenus = relationship("Submenu",
+                           back_populates="menu",
+                           cascade="all, delete")
 
 
-# class Submenu(Base):
-#     __tablename__ = "submenus"
-#     #metadata = MetaData(bind=engine)
-#
-#     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-#     title = Column(String, unique=True)
-#     description = Column(String)
-#     menu_id = Column(Integer, ForeignKey("menu.id"))
+class Submenu(Base):
+    __tablename__ = "submenus"
 
-    # foods = relationship("Food", back_populates="submenus")
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    title = Column(String, unique=True)
+    description = Column(String)
+    dishes_count = Column(Integer, default=0)
+
+    menu = relationship("Menu", back_populates="submenus")
+    # foods = relationship("Food", back_populates="submenu")
+
 
 """
 class Food(Submenu):
