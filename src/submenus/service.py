@@ -28,7 +28,7 @@ def delete_submenu(submenu_id: uuid, db: Session):
     submenu_in_db = db_requests.get_submenu_by_id(submenu_id, db)
     if not submenu_in_db:
         return None
-    checking_submenu_delete = db_requests.subdelete_menu(submenu_id, db)
+    checking_submenu_delete = db_requests.delete_submenu(submenu_id, db)
     return checking_submenu_delete
 
 

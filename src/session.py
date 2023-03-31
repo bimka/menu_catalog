@@ -1,16 +1,8 @@
-from typing import Generator
-import sqlalchemy
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "postgresql+psycopg2://postgres:postgres@0.0.0.0:5432/postgres"
-
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+from .models import engine
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base()
 
 
 def get_db():
