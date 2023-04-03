@@ -25,8 +25,6 @@ def create_submenu(
 @submenu_router.get("/", response_model=list[schemas.Submenu])
 def read_submenus(db: Session = Depends(get_db)):
     db_submenus = service.get_submenus(db)
-    if len(db_submenus) == 0:
-        raise HTTPException(status_code=200, detail="No submenu found.")
     return db_submenus
 
 
@@ -34,7 +32,7 @@ def read_submenus(db: Session = Depends(get_db)):
 def read_submenu(submenu_id: uuid.UUID, db: Session = Depends(get_db)):
     db_submenu = service.get_submenu(submenu_id, db)
     if db_submenu is None:
-        raise HTTPException(status_code=200, detail="Menu not found.")
+        raise HTTPException(status_code=404, detail="submenu not found")
     return db_submenu
 
 

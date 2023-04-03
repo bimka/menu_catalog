@@ -26,8 +26,6 @@ def create_menu(
 @menu_router.get("", response_model=list[schemas.Menu])
 def read_menus(db: Session = Depends(get_db)):
     db_menus = service.get_menus(db)
-    if db_menus is None:
-        raise HTTPException(status_code=404, detail="No menu found.")
     return db_menus
 
 
@@ -35,7 +33,7 @@ def read_menus(db: Session = Depends(get_db)):
 def read_menu(menu_id: uuid.UUID, db: Session = Depends(get_db)):
     db_menu = service.get_menu(menu_id, db)
     if db_menu is None:
-        raise HTTPException(status_code=200, detail="menu not found")
+        raise HTTPException(status_code=404, detail="menu not found")
     return db_menu
 
 

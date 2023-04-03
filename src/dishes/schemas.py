@@ -3,22 +3,24 @@ import uuid
 from pydantic import BaseModel
 
 
-class SubmenuBase(BaseModel):
+class DishBase(BaseModel):
     title: str
     description: str
-    dishes_count: int = 0
+    price: str
 
 
-class Submenu(SubmenuBase):
+class Dish(DishBase):
     id: uuid.UUID
+    submenu_id: uuid.UUID
+
 
     class Config:
         orm_mode = True
 
 
-class SubmenuCreate(SubmenuBase):
+class DishCreate(DishBase):
     pass
 
 
-class SubmenuUpdate(SubmenuBase):
+class DishUpdate(DishBase):
     pass

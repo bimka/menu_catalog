@@ -1,14 +1,10 @@
 import uuid
 
-from sqlalchemy import Column, Integer, String, ForeignKey, create_engine
+from sqlalchemy import Column, Integer, String, ForeignKey, create_engine, Float, select, func
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship, declarative_base, backref, column_property
 
-SQLALCHEMY_DATABASE_URL = "postgresql+psycopg2://postgres:postgres@0.0.0.0:5432/postgres"
-
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-
-Base = declarative_base()
+from src.session import Base, engine
 
 
 class Menu(Base):
@@ -20,9 +16,21 @@ class Menu(Base):
     submenus_count = Column(Integer, default=0)
     dishes_count = Column(Integer, default=0)
 
-    submenus = relationship("Submenu",
-                            back_populates="menu",
-                            cascade="all, delete")
+    # submenus = relationship("Submenu",
+    #                         back_populates="menu",
+    #                         cascade="all, delete")
+
+
+class Dish(Base):
+    __tablename__ = "dishes"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    title = Column(String, unique=True)
+    description = Column(String)
+    price = Column(Float, index=True)
+    submenu_id = Column(UUID(as_uuid=True), ForeignKey("submenus.id"))
+
+    submenu = relationship('Submenu', back_populates='dishes')
 
 
 class Submenu(Base):
@@ -31,20 +39,20 @@ class Submenu(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     title = Column(String, unique=True)
     description = Column(String)
-    dishes_count = Column(Integer, default=0)
-    menu_id = Column(UUID(as_uuid=True), ForeignKey("menus.id"))
 
-    menu = relationship("Menu", back_populates="submenus")
-    # foods = relationship("Food", back_populates="submenu")
+    # menu_id = Column(UUID(as_uuid=True), ForeignKey("menus.id"))
 
+    # menu = relationship("Menu", back_populates="submenus")
+    dishes_count = column_property(
+        select(func.count(Dish.id))
+        .where(Dish.submenu_id == id)
+        .correlate_except(Dish)
+        .scalar_subquery()
+    )
+    dishes = relationship("Dish",
+                          back_populates='submenu',
+                          cascade="all,delete", passive_deletes=True)
 
-"""
-class Food(Submenu):
-    __tablename__ = "foods"
-
-    id = Column(Integer, primary_key=True, integer=True)
-    name = Column(Integer, unique=True, index=True)
-    price = Column(Float, index=True)
-    submenu_id = Column(Integer, ForeignKey("submenu.id"))"""
+# Submenu.dishes = relationship("Dish", order_by=Dish.id, back_populates="submenu")
 
 Base.metadata.create_all(engine)
