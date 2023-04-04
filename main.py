@@ -7,9 +7,8 @@ from src.dishes.router import dish_router
 
 app = FastAPI()
 app.include_router(menu_router, prefix='/api/v1/menus')
-app.include_router(submenu_router, prefix='/api/v1/menus/{menu_id}/submenus')
-app.include_router(dish_router,
-                   prefix='/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes')
+app.include_router(submenu_router, prefix='/api/v1/menus')
+app.include_router(dish_router, prefix='/api/v1/menus')
 
 
 if __name__ == "__main__":

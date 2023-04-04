@@ -10,9 +10,9 @@ class DishBase(BaseModel):
 
 
 class Dish(DishBase):
-    id: uuid.UUID
-    submenu_id: uuid.UUID
-
+    id: int
+    submenu_id: int
+    menu_id: uuid.UUID
 
     class Config:
         orm_mode = True

@@ -4,17 +4,21 @@ from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from src import models
+import src
+from src import models, menus
 from src.session import get_db
-
 from src.submenus import schemas
 
 
-def create_submenu(submenu: schemas.SubmenuCreate, db: Session):
+def create_submenu(menu_id: uuid.UUID, submenu: schemas.SubmenuCreate, db: Session):
     new_submenu = models.Submenu(title=submenu.title,
                                  description=submenu.description,
-                                 dishes_count=submenu.dishes_count)
+                                 menu_id=menu_id)
     db.add(new_submenu)
+    db.flush()
+    menu: models.Menu = db.query(models.Menu).filter(models.Menu.id == menu_id).first()
+    menu.submenus_count += 1
+    # menus.db_requests.add_one_submenu_to_the_submenus_count(new_submenu.menu_id, db)
     db.commit()
     return new_submenu
 
@@ -32,13 +36,22 @@ def get_submenu_by_title(title: str, db: Session):
 
 
 def get_count_of_submenus(title: str, db: Session) -> int:
-    return db.query(models.Submenu).filter(models.Submenu.title == title).count()
+    return db.query(models.Submenu)\
+        .filter(models.Submenu.title == title)\
+        .count()
 
 
-def delete_submenu(submenu_id: uuid, db: Session):
-    checking_submenu_delete = db.query(models.Submenu).filter(models.Submenu.id == submenu_id).delete()
+def delete_submenu(menu_id: uuid.UUID, submenu_id: int, db: Session):
+    submenu_db = db.query(models.Submenu)\
+                                .filter(models.Submenu.id == submenu_id)\
+                                .first()
+    db.delete(submenu_db)
+    menu: models.Menu = db.query(models.Menu)\
+                          .filter(models.Menu.id == menu_id)\
+                          .first()
+    menu.submenus_count += 1
     db.commit()
-    return checking_submenu_delete
+    return submenu_db
 
 
 def update_submenu(submenu_id: uuid.UUID, submenu: dict, db: Session):
@@ -58,12 +71,13 @@ def update_submenu(submenu_id: uuid.UUID, submenu: dict, db: Session):
     return get_submenu_by_id(submenu_id, db)
 
 
-def add_one_dish_to_the_quantity(submenu_id: uuid.UUID, db: Session):
-    print(submenu_id)
-    new_count = db.query(models.Submenu.dishes_count) \
-        .filter(models.Submenu.id == submenu_id) \
-        .first()
-    print(new_count)
-    db.query(models.Submenu) \
-        .filter(models.Submenu.id == submenu_id) \
-        .update({"dishes_count": new_count})
+# def add_one_dish_to_the_dishes_count(submenu_id: uuid.UUID, db: Session):
+#     db.query(models.Submenu) \
+#         .filter(models.Submenu.id == submenu_id) \
+#         .update({"dishes_count": models.Submenu.dishes_count + 1})
+#
+#
+# def reduce_one_dish_to_the_dishes_count(submenu_id: uuid.UUID, db: Session):
+#     db.query(models.Submenu) \
+#         .filter(models.Submenu.id == submenu_id) \
+#         .update({"dishes_count": models.Submenu.dishes_count - 1})

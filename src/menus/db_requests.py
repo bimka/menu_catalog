@@ -12,9 +12,7 @@ from src.menus import schemas
 
 def create_menu(menu: schemas.MenuCreate, db: Session):
     new_menu = models.Menu(title=menu.title,
-                           description=menu.description,
-                           submenus_count=menu.submenus_count,
-                           dishes_count=menu.dishes_count)
+                           description=menu.description)
     db.add(new_menu)
     db.commit()
     return new_menu
@@ -41,13 +39,13 @@ def check_ability_to_update_menu(menu_id, new_title, db):
 
 
 def delete_menu(menu_id: uuid, db: Session):
-    checking_menu_delete = db.query(models.Menu).filter(models.Menu.id == menu_id).delete()
+    menu_db = db.query(models.Menu).filter(models.Menu.id == menu_id).first()
+    db.delete(menu_db)
     db.commit()
-    return checking_menu_delete
+    return menu_db
 
 
 def update_menu(menu_id: uuid.UUID, menu: dict, db: Session):
-
     if menu.get("title"):
         new_title = menu["title"]
         db.query(models.Menu) \
@@ -62,4 +60,16 @@ def update_menu(menu_id: uuid.UUID, menu: dict, db: Session):
 
     db.commit()
     return get_menu_by_id(menu_id, db)
+
+
+# def add_one_submenu_to_the_submenus_count(menu_id: uuid.UUID, db: Session):
+#     db.query(models.Menu) \
+#         .filter(models.Menu.id == menu_id) \
+#         .update({"submenus_count": models.Menu.submenus_count + 1})
+#
+#
+# def reduce_one_submenu_to_the_submenus_count(menu_id: uuid.UUID, db: Session):
+#     db.query(models.Submenu) \
+#         .filter(models.Menu.id == menu_id) \
+#         .update({"submenus_count": models.Menu.submenus_count - 1})
 

@@ -6,30 +6,35 @@ from src import submenus
 from src.dishes import db_requests, schemas
 
 
-def create_dish(dish: schemas.DishCreate, db: Session):
+def create_dish(menu_id: uuid.UUID,
+                submenu_id: int,
+                dish: schemas.DishCreate,
+                db: Session):
     dish_in_db = db_requests.get_dish_by_title(dish.title, db)
     if dish_in_db:
         return None
-    return db_requests.create_dish(dish, db)
+    return db_requests.create_dish(menu_id, submenu_id, dish, db)
 
 
 def get_dishes(db: Session):
     return db_requests.get_dishes(db)
 
 
-def get_dish(dish_id: uuid, db: Session):
+def get_dish(dish_id: uuid.UUID, db: Session):
     dish_in_db = db_requests.get_dish_by_id(dish_id, db)
     if not dish_in_db:
         return None
     return dish_in_db
 
 
-def delete_dish(dish_id: uuid, db: Session):
-
+def delete_dish(menu_id: uuid.UUID,
+                submenu_id: uuid.UUID,
+                dish_id: uuid.UUID,
+                db: Session):
     dish_in_db = db_requests.get_dish_by_id(dish_id, db)
     if not dish_in_db:
         return None
-    checking_dish_delete = db_requests.delete_dish(dish_id, db)
+    checking_dish_delete = db_requests.delete_dish(menu_id, submenu_id, dish_id, db)
     return checking_dish_delete
 
 

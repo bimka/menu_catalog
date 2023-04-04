@@ -5,11 +5,11 @@ from sqlalchemy.orm import Session
 from src.submenus import db_requests, schemas
 
 
-def create_submenu(submenu: schemas.SubmenuCreate, db: Session):
+def create_submenu(menu_id: uuid.UUID, submenu: schemas.SubmenuCreate, db: Session):
     submenu_in_db = db_requests.get_submenu_by_title(submenu.title, db)
     if submenu_in_db:
         return None
-    return db_requests.create_submenu(submenu, db)
+    return db_requests.create_submenu(menu_id, submenu, db)
 
 
 def get_submenus(db: Session):
@@ -23,12 +23,11 @@ def get_submenu(submenu_id: uuid, db: Session):
     return submenu_in_db
 
 
-def delete_submenu(submenu_id: uuid, db: Session):
-
+def delete_submenu(menu_id: uuid.UUID, submenu_id: uuid.UUID, db: Session):
     submenu_in_db = db_requests.get_submenu_by_id(submenu_id, db)
     if not submenu_in_db:
         return None
-    checking_submenu_delete = db_requests.delete_submenu(submenu_id, db)
+    checking_submenu_delete = db_requests.delete_submenu(menu_id, submenu_id, db)
     return checking_submenu_delete
 
 

@@ -6,11 +6,11 @@ from pydantic import BaseModel
 class SubmenuBase(BaseModel):
     title: str
     description: str
-    dishes_count: int = 0
 
 
 class Submenu(SubmenuBase):
-    id: uuid.UUID
+    id: int
+    dishes_count: int = 0
 
     class Config:
         orm_mode = True
