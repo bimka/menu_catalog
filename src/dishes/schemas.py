@@ -10,8 +10,8 @@ class DishBase(BaseModel):
 
 
 class Dish(DishBase):
-    id: int
-    submenu_id: int
+    id: uuid.UUID
+    submenu_id: uuid.UUID
     menu_id: uuid.UUID
 
     class Config:

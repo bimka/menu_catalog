@@ -20,5 +20,6 @@ class Menu(MenuBase):
 class MenuCreate(MenuBase):
     pass
 
+
 class MenuUpdate(MenuBase):
     pass

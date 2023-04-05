@@ -14,7 +14,7 @@ dish_router = APIRouter()
                   response_model=schemas.Dish,
                   status_code=status.HTTP_201_CREATED)
 def create_dish(menu_id: uuid.UUID,
-                submenu_id: int,
+                submenu_id: uuid.UUID,
                 dish: schemas.DishCreate,
                 db: Session = Depends(get_db)):
     new_dish = service.create_dish(menu_id, submenu_id, dish, db)
@@ -52,7 +52,8 @@ def delete_dish(menu_id: uuid.UUID,
     raise HTTPException(status_code=204, detail="Dish not deleted.")
 
 
-@dish_router.patch("/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}", response_model=schemas.Dish)
+@dish_router.patch("/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}",
+                   response_model=schemas.Dish)
 def update_submenu(dish_id: uuid.UUID,
                    dish: dict,
                    db: Session = Depends(get_db)):

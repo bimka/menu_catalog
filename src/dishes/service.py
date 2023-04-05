@@ -2,12 +2,11 @@ import uuid
 
 from sqlalchemy.orm import Session
 
-from src import submenus
 from src.dishes import db_requests, schemas
 
 
 def create_dish(menu_id: uuid.UUID,
-                submenu_id: int,
+                submenu_id: uuid.UUID,
                 dish: schemas.DishCreate,
                 db: Session):
     dish_in_db = db_requests.get_dish_by_title(dish.title, db)
@@ -34,8 +33,8 @@ def delete_dish(menu_id: uuid.UUID,
     dish_in_db = db_requests.get_dish_by_id(dish_id, db)
     if not dish_in_db:
         return None
-    checking_dish_delete = db_requests.delete_dish(menu_id, submenu_id, dish_id, db)
-    return checking_dish_delete
+    db_requests.delete_dish(menu_id, submenu_id, dish_id, db)
+    return 1
 
 
 def update_dish(dish_id: uuid.UUID,

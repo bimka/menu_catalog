@@ -9,7 +9,7 @@ class SubmenuBase(BaseModel):
 
 
 class Submenu(SubmenuBase):
-    id: int
+    id: uuid.UUID
     dishes_count: int = 0
 
     class Config:

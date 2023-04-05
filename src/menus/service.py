@@ -23,19 +23,15 @@ def get_menu(menu_id: uuid, db: Session):
     return menu_in_db
 
 
-def delete_menu(menu_id: uuid, db: Session):
-
+def delete_menu(menu_id: uuid.UUID, db: Session):
     menu_in_db = db_requests.get_menu_by_id(menu_id, db)
     if not menu_in_db:
         return None
-    checking_menu_delete = db_requests.delete_menu(menu_id, db)
-    return checking_menu_delete
+    db_requests.delete_menu(menu_id, db)
+    return 1
 
 
-def update_menu(menu_id: uuid.UUID,
-                menu: dict,
-                db: Session):
-
+def update_menu(menu_id: uuid.UUID, menu: dict, db: Session):
     menu_in_db = db_requests.get_menu_by_id(menu_id, db)
     if not menu_in_db:
         return -1

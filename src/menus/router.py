@@ -6,17 +6,14 @@ from starlette import status
 
 from src.menus import schemas, service
 from src.session import get_db
-from src.submenus.router import submenu_router
 
 menu_router = APIRouter()
 
 
 @menu_router.post("", response_model=schemas.Menu,
-             status_code=status.HTTP_201_CREATED)
-def create_menu(
-        menu: schemas.MenuCreate,
-        db: Session = Depends(get_db)
-):
+                  status_code=status.HTTP_201_CREATED)
+def create_menu(menu: schemas.MenuCreate,
+                db: Session = Depends(get_db)):
     new_menu = service.create_menu(menu, db)
     if new_menu is None:
         raise HTTPException(status_code=400, detail="Menu already exists.")
@@ -56,5 +53,4 @@ def update_menu(menu_id: uuid.UUID,
         raise HTTPException(status_code=404, detail="Menu not found")
     if db_menu == 0:
         raise HTTPException(status_code=200, detail="Title is already exist.")
-
     return db_menu
