@@ -19,7 +19,9 @@ def get_menus(db: Session):
 
 
 def get_menu_by_id(menu_id: uuid, db: Session):
-    return db.query(models.Menu).get(menu_id)
+    return db.query(models.Menu)\
+             .filter(models.Menu.id == menu_id)\
+             .first()
 
 
 def get_menu_by_title(title: str, db: Session):

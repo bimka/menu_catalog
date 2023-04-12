@@ -32,7 +32,9 @@ def get_dishes(db: Session):
 
 
 def get_dish_by_id(dish_id: uuid.UUID, db: Session):
-    return db.query(models.Dish).get(dish_id)
+    return db.query(models.Dish)\
+             .filter(models.Dish.id == dish_id)\
+             .first()
 
 
 def get_dish_by_title(title: str, db: Session):

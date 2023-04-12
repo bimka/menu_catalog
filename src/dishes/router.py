@@ -35,7 +35,7 @@ def read_dishes(db: Session = Depends(get_db)):
 def read_dish(dish_id: uuid.UUID, db: Session = Depends(get_db)):
     db_dish = service.get_dish(dish_id, db)
     if db_dish is None:
-        raise HTTPException(status_code=404, detail="dish not found")
+        raise HTTPException(status_code=404, detail="Dish is not found.")
     return db_dish
 
 

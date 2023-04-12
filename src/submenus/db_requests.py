@@ -26,8 +26,10 @@ def get_submenus(db: Session):
     return db.query(models.Submenu).all()
 
 
-def get_submenu_by_id(submenu_id: uuid, db: Session):
-    return db.query(models.Submenu).get(submenu_id)
+def get_submenu_by_id(submenu_id: uuid.UUID, db: Session):
+    return db.query(models.Submenu)\
+             .filter(models.Submenu.id == submenu_id)\
+             .first()
 
 
 def get_submenu_by_title(title: str, db: Session):

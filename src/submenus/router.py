@@ -36,7 +36,7 @@ def read_submenus(db: Session = Depends(get_db)):
 def read_submenu(submenu_id: uuid.UUID, db: Session = Depends(get_db)):
     db_submenu = service.get_submenu(submenu_id, db)
     if db_submenu is None:
-        raise HTTPException(status_code=404, detail="submenu not found")
+        raise HTTPException(status_code=404, detail="Submenu is not found.")
     return db_submenu
 
 

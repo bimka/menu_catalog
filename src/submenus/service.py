@@ -18,7 +18,7 @@ def get_submenus(db: Session):
     return db_requests.get_submenus(db)
 
 
-def get_submenu(submenu_id: uuid, db: Session):
+def get_submenu(submenu_id: uuid.UUID, db: Session):
     submenu_in_db = db_requests.get_submenu_by_id(submenu_id, db)
     if not submenu_in_db:
         return None
