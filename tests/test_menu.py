@@ -84,7 +84,6 @@ class TestMenus:
         assert response.json() == {"detail": "Menu is not found."}
 
     def test_get_menus(self, client):
-        """Returns an empty list"""
         response = client.get("/api/v1/menus")
         assert response.status_code == 200
         assert response.json() == []

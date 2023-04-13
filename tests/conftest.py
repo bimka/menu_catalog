@@ -17,18 +17,17 @@ def client():
     yield TestClient(app)
 
 
-@pytest.fixture(scope='class', autouse=True)
+@pytest.fixture(scope='class')
 def make_menu(client):
     response = client.post(
         "/api/v1/menus",
         json={"title": "My menu 1",
               "description": "My menu description 1"}
     )
-    print(response)
     yield response
 
 
-@pytest.fixture(scope='class', autouse=True)
+@pytest.fixture(scope='class')
 def make_submenu(client, make_menu):
     menu_id = make_menu.json()["id"]
     response = client.post(
@@ -39,7 +38,7 @@ def make_submenu(client, make_menu):
     yield response
 
 
-@pytest.fixture(scope='class', autouse=True)
+@pytest.fixture(scope='class')
 def make_dish_1(client, make_menu, make_submenu):
     menu_id = make_menu.json()["id"]
     submenu_id = make_submenu.json()["id"]
@@ -53,7 +52,7 @@ def make_dish_1(client, make_menu, make_submenu):
     )
     yield response
 
-@pytest.fixture(scope='class', autouse=True)
+@pytest.fixture(scope='class')
 def make_dish_2(client, make_menu, make_submenu):
     menu_id = make_menu.json()["id"]
     submenu_id = make_submenu.json()["id"]
@@ -67,7 +66,7 @@ def make_dish_2(client, make_menu, make_submenu):
     )
     yield response
 
-@pytest.fixture(scope='class', autouse=True)
+@pytest.fixture(scope='class')
 def make_dish_3(client, make_menu, make_submenu):
     menu_id = make_menu.json()["id"]
     submenu_id = make_submenu.json()["id"]
