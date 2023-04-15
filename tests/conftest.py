@@ -1,8 +1,8 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from src.main import app
-from src.session import Base, engine
+from app.main import app
+from app.src.session import Base, engine
 
 
 @pytest.fixture(scope="class", autouse=True)
