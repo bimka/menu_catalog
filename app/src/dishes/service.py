@@ -2,7 +2,7 @@ import uuid
 
 from sqlalchemy.orm import Session
 
-from src.dishes import db_requests, schemas
+from . import db_requests, schemas
 
 
 def create_dish(menu_id: uuid.UUID,

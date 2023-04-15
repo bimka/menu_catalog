@@ -2,7 +2,7 @@ import uuid
 
 from sqlalchemy.orm import Session
 
-from src.menus import db_requests, schemas
+from . import db_requests, schemas
 
 
 def create_menu(menu: schemas.MenuCreate, db: Session):

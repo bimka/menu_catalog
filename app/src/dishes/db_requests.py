@@ -2,9 +2,8 @@ import uuid
 
 from sqlalchemy.orm import Session
 
-from src import models, submenus, menus
-from src.session import get_db
-from src.dishes import schemas
+from .. import models
+from . import schemas
 
 
 def create_dish(menu_id: uuid.UUID,
@@ -18,9 +17,9 @@ def create_dish(menu_id: uuid.UUID,
                            submenu_id=submenu_id)
     db.add(new_dish)
     db.flush()
-    menu: models.Menu = menus.db_requests.get_menu_by_id(menu_id, db)
-    submenu: models.Submenu = submenus.db_requests\
-                                      .get_submenu_by_id(submenu_id, db)
+    menu: models.Menu = app.src.menus.db_requests.get_menu_by_id(menu_id, db)
+    submenu: models.Submenu = app.src.submenus.db_requests \
+        .get_submenu_by_id(submenu_id, db)
     menu.dishes_count += 1
     submenu.dishes_count += 1
     db.commit()
@@ -50,9 +49,9 @@ def delete_dish(menu_id: uuid.UUID,
     checking_dish_delete = db.query(models.Dish)\
                              .filter(models.Dish.id == dish_id)\
                              .delete()
-    menu: models.Menu = menus.db_requests.get_menu_by_id(menu_id, db)
-    submenu: models.Submenu = submenus.db_requests\
-                                      .get_submenu_by_id(submenu_id, db)
+    menu: models.Menu = app.src.menus.db_requests.get_menu_by_id(menu_id, db)
+    submenu: models.Submenu = app.src.submenus.db_requests \
+        .get_submenu_by_id(submenu_id, db)
     menu.dishes_count -= 1
     submenu.dishes_count -= 1
     db.commit()

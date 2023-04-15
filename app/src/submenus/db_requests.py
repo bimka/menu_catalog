@@ -2,8 +2,8 @@ import uuid
 
 from sqlalchemy.orm import Session
 
-from src import models
-from src.submenus import schemas
+from .. import models
+from . import schemas
 
 
 def create_submenu(menu_id: uuid.UUID,

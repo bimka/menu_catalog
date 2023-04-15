@@ -4,8 +4,8 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from starlette import status
 
-from src.menus import schemas, service
-from src.session import get_db
+from ..session import get_db
+from . import schemas, service
 
 menu_router = APIRouter()
 
