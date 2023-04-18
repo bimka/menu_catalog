@@ -9,14 +9,10 @@ RUN apt-get update -y
 
 EXPOSE 8000
 
-COPY . /app
+COPY . .
 
-WORKDIR /app
+RUN pip install --upgrade pip && pip install -r requirements.txt --no-cache-dir
 
+WORKDIR .
 
-
-RUN pip install -r requirements.txt --no-cache-dir
-
-
-CMD ["python", "app/main.py"]
-# CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--reload"]
