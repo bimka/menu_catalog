@@ -5,24 +5,17 @@ services:
   db:
     container_name: db
     image: postgres:15.1-alpine
-#    volumes:
-#      - ./psql:/var/lib/postgresql/data/
     environment:
-      POSTGRES_DB: "postgres"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
-#    volumes:
-#      - ./psql:/var/lib/postgresql/data/
-#    env_file:
-#      - .env
+      DPOSTGRES_NAME: $POSTGRES_NAME
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_PORT: $POSTGRES_PORT
     networks:
       - app_network
     expose:
-      - "5432"
-#    ports:
-#      - 5432:5432
+      - $POSTGRES_PORT
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d postgres -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -d ${POSTGRES_NAME} -U ${POSTGRES_USER}"]
       interval: 10s
       timeout: 3s
       retries: 5
@@ -31,11 +24,7 @@ services:
     container_name: menu_app
     build:
       context: .
-      dockerfile: Dockerfile
-#    volumes:
-#      - shared:menu_catalog/reports
-#    env_file:
-#      - .env
+      dockerfile: app/Dockerfile
     entrypoint: >
       sh -c "
         echo 'Making migrations...' &&
