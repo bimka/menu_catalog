@@ -1,6 +1,5 @@
 import uuid
 
-import pytest
 
 class TestSubmenus:
     def test_create_submenu(self, client, make_submenu):

@@ -1,8 +1,10 @@
+
 import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.src.session import Base, engine
+from app.src.session import engine
+from app.src.models import Base
 
 
 @pytest.fixture(scope="class", autouse=True)
@@ -79,12 +81,3 @@ def make_dish_3(client, make_menu, make_submenu):
         }
     )
     yield response
-
-
-
-
-
-
-
-
-
