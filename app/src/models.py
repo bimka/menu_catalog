@@ -8,6 +8,7 @@ from .session import engine
 
 Base = declarative_base()
 
+
 class Menu(Base):
     __tablename__ = "menus"
 
@@ -53,10 +54,5 @@ class Dish(Base):
     menu = relationship("Menu", back_populates="dishes")
     submenu = relationship("Submenu", back_populates="dishes")
 
+Base.metadata.create_all(engine)
 
-# Base.metadata.create_all(engine)
-#
-# from app.src.session import Base
-# target_metadata = Base.metadata
-#
-# sqlalchemy.url = postgresql://postgres:postgres@0.0.0.0:5432/postgres

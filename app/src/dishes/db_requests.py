@@ -17,9 +17,15 @@ def create_dish(menu_id: uuid.UUID,
                            submenu_id=submenu_id)
     db.add(new_dish)
     db.flush()
-    menu: models.Menu = app.src.menus.db_requests.get_menu_by_id(menu_id, db)
-    submenu: models.Submenu = app.src.submenus.db_requests \
-        .get_submenu_by_id(submenu_id, db)
+    menu: models.Menu = db.query(models.Menu) \
+        .filter(models.Menu.id == menu_id) \
+        .first()
+    submenu: models.Menu = db.query(models.Submenu) \
+        .filter(models.Submenu.id == submenu_id) \
+        .first()
+    # menu: models.Menu = app.src.menus.db_requests.get_menu_by_id(menu_id, db)
+    # submenu: models.Submenu = app.src.submenus.db_requests \
+    #     .get_submenu_by_id(submenu_id, db)
     menu.dishes_count += 1
     submenu.dishes_count += 1
     db.commit()
@@ -49,9 +55,15 @@ def delete_dish(menu_id: uuid.UUID,
     checking_dish_delete = db.query(models.Dish)\
                              .filter(models.Dish.id == dish_id)\
                              .delete()
-    menu: models.Menu = app.src.menus.db_requests.get_menu_by_id(menu_id, db)
-    submenu: models.Submenu = app.src.submenus.db_requests \
-        .get_submenu_by_id(submenu_id, db)
+    # menu: models.Menu = app.src.menus.db_requests.get_menu_by_id(menu_id, db)
+    # submenu: models.Submenu = app.src.submenus.db_requests \
+    #     .get_submenu_by_id(submenu_id, db)
+    menu: models.Menu = db.query(models.Menu) \
+        .filter(models.Menu.id == menu_id) \
+        .first()
+    submenu: models.Menu = db.query(models.Submenu) \
+        .filter(models.Submenu.id == submenu_id) \
+        .first()
     menu.dishes_count -= 1
     submenu.dishes_count -= 1
     db.commit()

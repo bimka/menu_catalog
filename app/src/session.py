@@ -1,11 +1,18 @@
 import os
+import socket
+
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 load_dotenv()
 
-SQLALCHEMY_DATABASE_URL = os.getenv("POSTGRES_NAME_URL")
+# host = os.getenv("DB_HOST", "0.0.0.0")
+# SQLALCHEMY_DATABASE_URL = f"postgresql+psycopg2://postgres:postgres@{host}:5432/postgres"
+
+addr = socket.gethostbyname('db')
+SQLALCHEMY_DATABASE_URL = f"postgresql+psycopg2://postgres:postgres@{addr}:5432/postgres"
+# SQLALCHEMY_DATABASE_URL = os.getenv("DB_NAME_URL")
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
