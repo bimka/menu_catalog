@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+
+  db:
+    container_name: test_db
+    image: postgres:15.1-alpine
+    environment:
+      POSTGRES_NAME: $TEST_DB_NAME
+      POSTGRES_USER: $TEST_DB_USER
+      POSTGRES_PASSWORD: $TEST_DB_PASSWORD
+      POSTGRES_PORT: $TEST_DB_PORT
+      POSTGRES_HOST: $TEST_DB_HOST
+    networks:
+      - test_app_network
+    ports:
+      - 5433:5432
+    expose:
+      - $POSTGRES_PORT
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d ${TEST_DB_NAME} -U ${TEST_DB_USER}"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  test_app:
+    container_name: test_menu_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: >
+      sh -c "
+        cd tests &&
+        echo 'Making tests...' &&
+        pytest -vv
+      "
+    networks:
+      - test_app_network
+    depends_on:
+      db:
+        condition: service_healthy
+
+networks:
+  test_app_network:
+    name: test_app_network
