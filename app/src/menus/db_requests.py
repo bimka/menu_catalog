@@ -1,57 +1,52 @@
 import uuid
 
-from sqlalchemy.orm import Session
-
-from .. import models
-from . import schemas
+from .schemas import MenuCreate
+from ..models import Menu
 
 
-def create_menu(menu: schemas.MenuCreate, db: Session):
-    new_menu = models.Menu(title=menu.title,
-                           description=menu.description)
-    db.add(new_menu)
-    db.commit()
-    return new_menu
+class MenuDB:
+    def __init__(self, db):
+        self.db = db
 
+    def get_menus(self):
+        return self.db.query(Menu).all()
 
-def get_menus(db: Session):
-    return db.query(models.Menu).all()
+    def create_menu(self, menu: MenuCreate):
+        new_menu = Menu(title=menu.title,
+                        description=menu.description)
+        self.db.add(new_menu)
+        self.db.commit()
+        return new_menu
 
+    def get_menu_by_title(self, title):
+        return self.db.query(Menu) \
+                   .filter(Menu.title == title) \
+                   .first()
 
-def get_menu_by_id(menu_id: uuid, db: Session):
-    return db.query(models.Menu)\
-             .filter(models.Menu.id == menu_id)\
-             .first()
+    def get_menu_by_id(self, menu_id: uuid):
+        return self.db.query(Menu) \
+                   .filter(Menu.id == menu_id) \
+                   .first()
 
+    def delete_menu(self, menu_id: uuid.UUID):
+        menu_db = self.db.query(Menu) \
+                      .filter(Menu.id == menu_id) \
+                      .first()
+        self.db.delete(menu_db)
+        self.db.commit()
 
-def get_menu_by_title(title: str, db: Session):
-    return db.query(models.Menu)\
-             .filter(models.Menu.title == title)\
-             .first()
+    def update_menu(self, menu_id: uuid.UUID, menu: dict):
+        if menu.get("title"):
+            new_title = menu["title"]
+            self.db.query(Menu) \
+                .filter(Menu.id == menu_id) \
+                .update({'title': new_title})
 
+        if menu["description"]:
+            new_description = menu["description"]
+            self.db.query(Menu) \
+                .filter(Menu.id == menu_id) \
+                .update({'description': new_description})
 
-def delete_menu(menu_id: uuid.UUID, db: Session):
-    menu_db = db.query(models.Menu)\
-                .filter(models.Menu.id == menu_id)\
-                .first()
-    db.delete(menu_db)
-    db.commit()
-
-
-def update_menu(menu_id: uuid.UUID, menu: dict, db: Session):
-    if menu.get("title"):
-        new_title = menu["title"]
-        db.query(models.Menu)\
-            .filter(models.Menu.id == menu_id)\
-            .update({'title': new_title})
-
-    if menu["description"]:
-        new_description = menu["description"]
-        db.query(models.Menu)\
-            .filter(models.Menu.id == menu_id)\
-            .update({'description': new_description})
-
-    db.commit()
-    return get_menu_by_id(menu_id, db)
-
-
+        self.db.commit()
+        return self.get_menu_by_id(menu_id)
