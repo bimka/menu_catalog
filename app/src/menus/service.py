@@ -2,11 +2,13 @@ import uuid
 
 from .db_requests import MenuDB
 from .schemas import MenuCreate
+from ..cache import Cache
 
 
 class MenuService:
-    def __init__(self, menuDB: MenuDB):
+    def __init__(self, menuDB: MenuDB, cache: Cache):
         self.menuDB = menuDB
+        self.cache = cache
 
     def get_menus(self):
         return self.menuDB.get_menus()
