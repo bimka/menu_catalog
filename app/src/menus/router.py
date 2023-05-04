@@ -21,8 +21,8 @@ def create_menu(menu: schemas.MenuCreate,
         raise HTTPException(status_code=400, detail="Menu already exists.")
     return new_menu
 
-
-@menu_router.get("", response_model=list[schemas.Menu])
+@menu_router.get("")
+# @menu_router.get("", response_model=list[schemas.Menu])
 def read_menus(menu_service: MenuService = Depends(get_menu_service)):
     return menu_service.get_menus()
 

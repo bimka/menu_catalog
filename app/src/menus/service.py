@@ -1,4 +1,7 @@
+import json
 import uuid
+
+from fastapi.encoders import jsonable_encoder
 
 from .db_requests import MenuDB
 from .schemas import MenuCreate
@@ -11,7 +14,14 @@ class MenuService:
         self.cache = cache
 
     def get_menus(self):
-        return self.menuDB.get_menus()
+        menu_list = self.cache.get("menu_list:")
+        menu_list = None
+        if menu_list is None:
+            menu_list = self.menuDB.get_menus()
+            menu_str_list = json.dumps(jsonable_encoder(menu_list))
+            self.cache.set("menu_list:", menu_str_list)
+        # print(type(json.loads(menu_list)))
+        return menu_list
 
     def create_menu(self, menu: MenuCreate):
         menu_in_db = self.menuDB.get_menu_by_title(menu.title)
