@@ -1,6 +1,8 @@
 import json
 
 import redis
+from fastapi import Depends
+from fastapi.encoders import jsonable_encoder
 
 
 class Cache:
@@ -13,7 +15,12 @@ class Cache:
     def get(self, key):
         value = self.cache.get(name=key)
         if value:
-            return json.loads(value)
+            print("++++++++++++++++++++++++++++++")
+            s = json.decode(value)
+            print(s)
+            print(type(s))
+            print("++++++++++++++++++++++++++++++")
+            return s
         return None
 
     def set(self, key, value):
@@ -29,3 +36,7 @@ def get_redis():
         yield r
     finally:
         r.close()
+
+
+def get_cache(cashe = Depends(get_redis)):
+    return Cache(cashe)

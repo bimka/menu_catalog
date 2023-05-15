@@ -4,15 +4,11 @@ from sqlalchemy.orm import Session
 from .db_requests import MenuDB
 from .service import MenuService
 from ..session import get_db
-from ..cache import Cache, get_redis
+from ..cache import Cache, get_cache
 
 
 def get_menuDB(db: Session = Depends(get_db)):
     return MenuDB(db)
-
-
-def get_cache(cashe = Depends(get_redis)):
-    return Cache(cashe)
 
 
 def get_menu_service(menuDB: MenuDB = Depends(get_menuDB),

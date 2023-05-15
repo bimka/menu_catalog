@@ -15,7 +15,7 @@ class TestMenus:
         }
 
     def test_get_count_menus(self, client):
-        response = client.get("/api/v1/menus")
+        response = client.get(f"/api/v1/menus")
         assert response.status_code == 200
         assert len(response.json()) == 1
 
