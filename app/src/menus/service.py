@@ -15,12 +15,11 @@ class MenuService:
 
     def get_menus(self):
         menu_list = self.cache.get("menu_list:")
-        menu_list = None
+
         if menu_list is None:
             menu_list = self.menuDB.get_menus()
             menu_str_list = json.dumps(jsonable_encoder(menu_list))
             self.cache.set("menu_list:", menu_str_list)
-        # print(type(json.loads(menu_list)))
         return menu_list
 
     def create_menu(self, menu: MenuCreate):

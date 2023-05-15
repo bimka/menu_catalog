@@ -11,8 +11,13 @@ def get_menuDB(db: Session = Depends(get_db)):
     return MenuDB(db)
 
 
+def get_cache(cashe = Depends(get_redis)):
+    return Cache(cashe)
+
+
 def get_menu_service(menuDB: MenuDB = Depends(get_menuDB),
-                     cache: Cache = Depends(get_redis)):
+                     cache: Cache = Depends(get_cache)):
     return MenuService(menuDB, cache)
+
 
 
