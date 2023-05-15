@@ -7,6 +7,9 @@ class Cache:
     def __init__(self, cache):
         self.cache = cache
 
+    def append(self, key, value):
+        self.cache.append(key=key, value=value)
+
     def get(self, key):
         value = self.cache.get(name=key)
         if value:
@@ -17,7 +20,7 @@ class Cache:
         self.cache.set(name=key, value=value)
 
     def delete(self, key):
-        self.cache.delete(name=key)
+        self.cache.delete(key)
 
 
 def get_redis():
