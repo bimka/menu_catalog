@@ -15,12 +15,7 @@ class Cache:
     def get(self, key):
         value = self.cache.get(name=key)
         if value:
-            print("++++++++++++++++++++++++++++++")
-            s = json.decode(value)
-            print(s)
-            print(type(s))
-            print("++++++++++++++++++++++++++++++")
-            return s
+            return json.loads(value)
         return None
 
     def set(self, key, value):
