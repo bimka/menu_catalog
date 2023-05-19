@@ -9,8 +9,8 @@ from ..cache import Cache
 
 
 class MenuService:
-    def __init__(self, menuDB: MenuDB, cache: Cache):
-        self.menuDB = menuDB
+    def __init__(self, menu_db: MenuDB, cache: Cache):
+        self.menuDB = menu_db
         self.cache = cache
 
     def get_menus(self):
@@ -30,7 +30,7 @@ class MenuService:
         return self.menuDB.create_menu(menu)
 
     def get_menu(self, menu_id: uuid):
-        cashed_data = self.cache.get(f'menu_{menu_id}:')
+        cashed_data = self.cache.get(f"menu_{menu_id}:")
         if cashed_data:
             db_menu = cashed_data
         else:
@@ -38,7 +38,7 @@ class MenuService:
             if not db_menu:
                 return None
             menu_str = json.dumps(jsonable_encoder(db_menu))
-            self.cache.set(f'menu_{menu_id}:', menu_str)
+            self.cache.set(f"menu_{menu_id}:", menu_str)
         return db_menu
 
     def delete_menu(self, menu_id: uuid.UUID):
@@ -46,8 +46,8 @@ class MenuService:
         if not menu_in_db:
             return None
         self.menuDB.delete_menu(menu_id)
-        self.cache.delete(f'menu_{menu_id}:')
-        self.cache.delete('menu_list:')
+        self.cache.delete(f"menu_{menu_id}:")
+        self.cache.delete("menu_list:")
         return 1
 
     def update_menu(self, menu_id: uuid.UUID, menu: dict):
@@ -60,5 +60,5 @@ class MenuService:
             menu_in_db = self.menuDB.get_menu_by_title(new_title)
             if menu_in_db:
                 return 0
-        self.cache.delete(f'menu_{menu_id}:')
+        self.cache.delete(f"menu_{menu_id}:")
         return self.menuDB.update_menu(menu_id, menu)

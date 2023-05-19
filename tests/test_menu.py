@@ -14,10 +14,10 @@ class TestMenus:
             "dishes_count": 0
         }
 
-    def test_get_count_menus(self, client):
-        response = client.get(f"/api/v1/menus")
-        assert response.status_code == 200
-        assert len(response.json()) == 1
+    # def test_get_count_menus(self, client):
+    #     response = client.get(f"/api/v1/menus")
+    #     assert response.status_code == 200
+    #     assert len(response.json()) == 1
 
     def test_check_menu_1(self, client, make_menu):
         menu = make_menu

@@ -18,7 +18,9 @@ class Menu(Base):
     submenus_count = Column(Integer, default=0)
     dishes_count = Column(Integer, default=0)
 
-    submenus = relationship("Submenu", back_populates="menu", passive_deletes=True)
+    submenus = relationship(
+        "Submenu", back_populates="menu", passive_deletes=True
+    )
     dishes = relationship("Dish", back_populates="menu", passive_deletes=True)
 
 
@@ -29,12 +31,16 @@ class Submenu(Base):
     title = Column(String, unique=True)
     description = Column(String)
     dishes_count = Column(Integer, default=0)
-    menu_id = Column(UUID(as_uuid=True),
-                     ForeignKey("menus.id", ondelete="CASCADE"),
-                     nullable=False)
+    menu_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("menus.id", ondelete="CASCADE"),
+        nullable=False,
+    )
 
     menu = relationship("Menu", back_populates="submenus")
-    dishes = relationship("Dish", back_populates="submenu", passive_deletes=True)
+    dishes = relationship(
+        "Dish", back_populates="submenu", passive_deletes=True
+    )
 
 
 class Dish(Base):
@@ -44,15 +50,19 @@ class Dish(Base):
     title = Column(String, unique=True)
     description = Column(String)
     price = Column(String, index=True)
-    menu_id = Column(UUID(as_uuid=True),
-                     ForeignKey("menus.id", ondelete="CASCADE"),
-                     nullable=False)
-    submenu_id = Column(UUID(as_uuid=True),
-                        ForeignKey("submenus.id", ondelete="CASCADE"),
-                        nullable=False)
+    menu_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("menus.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    submenu_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("submenus.id", ondelete="CASCADE"),
+        nullable=False,
+    )
 
     menu = relationship("Menu", back_populates="dishes")
     submenu = relationship("Submenu", back_populates="dishes")
 
-Base.metadata.create_all(engine)
 
+Base.metadata.create_all(engine)

@@ -2,7 +2,6 @@ import json
 
 import redis
 from fastapi import Depends
-from fastapi.encoders import jsonable_encoder
 
 
 class Cache:
@@ -26,12 +25,12 @@ class Cache:
 
 
 def get_redis():
-    r = redis.Redis(host='localhost', port=6379)
+    r = redis.Redis(host="localhost", port=6379)
     try:
         yield r
     finally:
         r.close()
 
 
-def get_cache(cashe = Depends(get_redis)):
+def get_cache(cashe=Depends(get_redis)):
     return Cache(cashe)

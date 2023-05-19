@@ -9,8 +9,8 @@ from ..cache import Cache
 
 
 class SubmenuService:
-    def __init__(self, submenuDB: SubmenuDB, cache: Cache):
-        self.submenuDB = submenuDB
+    def __init__(self, submenu_db: SubmenuDB, cache: Cache):
+        self.submenuDB = submenu_db
         self.cache = cache
 
     def get_submenus(self):
@@ -32,7 +32,7 @@ class SubmenuService:
         return self.submenuDB.create_submenu(menu_id, submenu)
 
     def get_submenu(self, submenu_id: uuid.UUID):
-        cashed_data = self.cache.get(f'submenu_{submenu_id}:')
+        cashed_data = self.cache.get(f"submenu_{submenu_id}:")
         if cashed_data:
             db_submenu = cashed_data
         else:
@@ -40,7 +40,7 @@ class SubmenuService:
             if not db_submenu:
                 return None
             submenu_str = json.dumps(jsonable_encoder(db_submenu))
-            self.cache.set(f'submenu_{submenu_id}:', submenu_str)
+            self.cache.set(f"submenu_{submenu_id}:", submenu_str)
         return db_submenu
 
     def delete_submenu(self, menu_id: uuid, submenu_id: uuid.UUID):
@@ -48,7 +48,7 @@ class SubmenuService:
         if not submenu_in_db:
             return None
         self.submenuDB.delete_submenu(menu_id, submenu_id)
-        self.cache.delete(f'submenu_{submenu_id}:')
+        self.cache.delete(f"submenu_{submenu_id}:")
         self.cache.delete("submenu_list")
         self.cache.delete("menu_list")
         return 1
@@ -63,7 +63,7 @@ class SubmenuService:
             submenu_in_db = self.submenuDB.get_submenu_by_title(new_title)
             if submenu_in_db:
                 return 0
-        self.cache.delete(f'submenu_{submenu_id}:')
+        self.cache.delete(f"submenu_{submenu_id}:")
         self.cache.delete("submenu_list")
         self.cache.delete("menu_list")
         return self.submenuDB.update_submenu(submenu_id, submenu)

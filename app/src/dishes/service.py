@@ -9,8 +9,8 @@ from ..cache import Cache
 
 
 class DishService:
-    def __init__(self, dishDB: DishDB, cache: Cache):
-        self.dishDB = dishDB
+    def __init__(self, dish_db: DishDB, cache: Cache):
+        self.dishDB = dish_db
         self.cache = cache
 
     def get_dishes(self):
@@ -21,9 +21,12 @@ class DishService:
             self.cache.set("dish_list:", dishes_str_list)
         return dishes_list
 
-    def create_dish(self, menu_id: uuid.UUID,
-                    submenu_id: uuid.UUID,
-                    dish: schemas.DishCreate):
+    def create_dish(
+        self,
+        menu_id: uuid.UUID,
+        submenu_id: uuid.UUID,
+        dish: schemas.DishCreate,
+    ):
         dish_in_db = self.dishDB.get_dish_by_title(dish.title)
         if dish_in_db:
             return None
@@ -36,7 +39,7 @@ class DishService:
         return self.dishDB.create_dish(menu_id, submenu_id, dish)
 
     def get_dish(self, dish_id: uuid.UUID):
-        cashed_data = self.cache.get(f'dish_{dish_id}:')
+        cashed_data = self.cache.get(f"dish_{dish_id}:")
         if cashed_data:
             db_dish = cashed_data
         else:
@@ -44,25 +47,25 @@ class DishService:
             if not db_dish:
                 return None
             dish_str = json.dumps(jsonable_encoder(db_dish))
-            self.cache.set(f'dish_{dish_id}:', dish_str)
+            self.cache.set(f"dish_{dish_id}:", dish_str)
         return db_dish
 
-    def delete_dish(self, menu_id: uuid.UUID,
-                    submenu_id: uuid.UUID,
-                    dish_id: uuid.UUID):
-        dish_in_db = self.dishDB.get_dish_by_id(dish_id,)
+    def delete_dish(
+        self, menu_id: uuid.UUID, submenu_id: uuid.UUID, dish_id: uuid.UUID
+    ):
+        dish_in_db = self.dishDB.get_dish_by_id(
+            dish_id,
+        )
         if not dish_in_db:
             return None
         self.dishDB.delete_dish(menu_id, submenu_id, dish_id)
-        self.cache.delete(f'dish_{dish_id}:')
-        self.cache.delete(f'submenu_{submenu_id}:')
-        self.cache.delete(f'submenu_list:')
+        self.cache.delete(f"dish_{dish_id}:")
+        self.cache.delete(f"submenu_{submenu_id}:")
+        self.cache.delete("submenu_list:")
         self.cache.delete("menu_list:")
         return 1
 
-    def update_dish(self, dish_id: uuid.UUID,
-                    dish: dict):
-
+    def update_dish(self, dish_id: uuid.UUID, dish: dict):
         dish_in_db = self.dishDB.get_dish_by_id(dish_id)
         if not dish_in_db:
             return -1
