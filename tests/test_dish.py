@@ -1,10 +1,7 @@
 import uuid
 
-import pytest
-
 
 class TestDishes:
-
     def test_create_dish(self, client, make_menu, make_submenu, make_dish_1):
         menu = make_menu
         submenu = make_submenu
@@ -19,7 +16,7 @@ class TestDishes:
             "description": "My dish description 1",
             "price": "11.22",
             "menu_id": menu_id,
-            "submenu_id": submenu_id
+            "submenu_id": submenu_id,
         }
 
     # def test_get_count_dishes(self, client, make_menu, make_submenu):
@@ -41,7 +38,8 @@ class TestDishes:
         dish_id = dish.json()["id"]
         response = client.get(
             f"/api/v1/menus/{menu_id}"
-            f"/submenus/{submenu_id}/dishes/{dish_id}")
+            f"/submenus/{submenu_id}/dishes/{dish_id}"
+        )
         assert response.status_code == 200
         assert response.json() == {
             "id": dish_id,
@@ -49,7 +47,7 @@ class TestDishes:
             "description": "My dish description 1",
             "price": "11.22",
             "menu_id": menu_id,
-            "submenu_id": submenu_id
+            "submenu_id": submenu_id,
         }
 
     def test_check_fake_dish(self, client, make_menu, make_submenu):
@@ -60,7 +58,8 @@ class TestDishes:
         fake_dish_id = uuid.uuid4()
         response = client.get(
             f"/api/v1/menus/{menu_id}"
-            f"/submenus/{submenu_id}/dishes/{fake_dish_id}")
+            f"/submenus/{submenu_id}/dishes/{fake_dish_id}"
+        )
         assert response.status_code == 404
         assert response.json() == {"detail": "Dish is not found."}
 
@@ -77,8 +76,8 @@ class TestDishes:
             json={
                 "title": "Updated dish 1",
                 "description": "Updated dish description 1",
-                "price": "1122.55"
-            }
+                "price": "1122.55",
+            },
         )
         assert response.status_code == 200
         assert response.json() == {
@@ -87,10 +86,13 @@ class TestDishes:
             "description": "Updated dish description 1",
             "price": "1122.55",
             "menu_id": menu_id,
-            "submenu_id": submenu_id
+            "submenu_id": submenu_id,
         }
 
-    # def test_check_dish_2(self, client, make_menu, make_submenu, make_dish_1):
+    # def test_check_dish_2(self, client,
+    #                            make_menu,
+    #                            make_submenu,
+    #                            make_dish_1):
     #     menu = make_menu
     #     submenu = make_submenu
     #     dish = make_dish_1
@@ -117,11 +119,13 @@ class TestDishes:
         menu_id = menu.json()["id"]
         submenu_id = submenu.json()["id"]
         dish_id = dish.json()["id"]
-        response = client.delete(f"/api/v1/menus/{menu_id}"
-                                 f"/submenus/{submenu_id}"
-                                 f"/dishes/{dish_id}")
+        response = client.delete(
+            f"/api/v1/menus/{menu_id}"
+            f"/submenus/{submenu_id}"
+            f"/dishes/{dish_id}"
+        )
         assert response.status_code == 200
-        assert response.json() == {'detail': 'Dish is deleted successfully.'}
+        assert response.json() == {"detail": "Dish is deleted successfully."}
 
     def test_check_dish_3(self, client, make_menu, make_submenu, make_dish_1):
         menu = make_menu
@@ -130,9 +134,11 @@ class TestDishes:
         menu_id = menu.json()["id"]
         submenu_id = submenu.json()["id"]
         dish_id = dish.json()["id"]
-        response = client.get(f"/api/v1/menus/{menu_id}"
-                              f"/submenus/{submenu_id}"
-                              f"/dishes/{dish_id}")
+        response = client.get(
+            f"/api/v1/menus/{menu_id}"
+            f"/submenus/{submenu_id}"
+            f"/dishes/{dish_id}"
+        )
         assert response.status_code == 404
         assert response.json() == {"detail": "Dish is not found."}
 
@@ -145,4 +151,3 @@ class TestDishes:
     #                           f"/submenus/{submenu_id}/dishes")
     #     assert response.status_code == 200
     #     assert response.json() == []
-

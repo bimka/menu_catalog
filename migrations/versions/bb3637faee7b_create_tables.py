@@ -1,7 +1,7 @@
 """create tables
 
 Revision ID: bb3637faee7b
-Revises: 
+Revises:
 Create Date: 2023-04-17 20:23:42.155226
 
 """
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'bb3637faee7b'
+revision = "bb3637faee7b"
 down_revision = None
 branch_labels = None
 depends_on = None

@@ -10,7 +10,7 @@ class TestSubmenus:
             "id": submenu_id,
             "title": "My submenu 1",
             "description": "My submenu description 1",
-            "dishes_count": 0
+            "dishes_count": 0,
         }
 
     # def test_get_count_submenus(self, client, make_menu):
@@ -31,7 +31,7 @@ class TestSubmenus:
             "id": submenu_id,
             "title": "My submenu 1",
             "description": "My submenu description 1",
-            "dishes_count": 0
+            "dishes_count": 0,
         }
 
     def test_check_fake_submenu(self, client, make_menu):
@@ -53,15 +53,15 @@ class TestSubmenus:
             f"/api/v1/menus/{menu_id}/submenus/{submenu_id}",
             json={
                 "title": "Updated submenu 1",
-                "description": "Updated submenu description 1"
-            }
+                "description": "Updated submenu description 1",
+            },
         )
         assert response.status_code == 200
         assert response.json() == {
             "id": submenu_id,
             "title": "Updated submenu 1",
             "description": "Updated submenu description 1",
-            "dishes_count": 0
+            "dishes_count": 0,
         }
 
     def test_check_submenu_2(self, client, make_menu, make_submenu):
@@ -75,7 +75,7 @@ class TestSubmenus:
             "id": submenu_id,
             "title": "Updated submenu 1",
             "description": "Updated submenu description 1",
-            "dishes_count": 0
+            "dishes_count": 0,
         }
 
     def test_delete_submenu(self, client, make_menu, make_submenu):
@@ -83,11 +83,13 @@ class TestSubmenus:
         menu_id = menu.json()["id"]
         submenu = make_submenu
         submenu_id = submenu.json()["id"]
-        response = client.delete(f"/api/v1/menus/{menu_id}"
-                                 f"/submenus/{submenu_id}")
+        response = client.delete(
+            f"/api/v1/menus/{menu_id}" f"/submenus/{submenu_id}"
+        )
         assert response.status_code == 200
-        assert response.json() == {'detail': 'Submenu is deleted successfully.'}
-
+        assert response.json() == {
+            "detail": "Submenu is deleted successfully."
+        }
 
     def test_check_submenu_3(self, client, make_menu, make_submenu):
         menu = make_menu
